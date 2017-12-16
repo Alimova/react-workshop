@@ -6,8 +6,6 @@ const emotions = imageUrl =>
             "Ocp-Apim-Subscription-Key": "bb180a9186354adf8989c01fe408b497"
         },
         body: `{"url": "${imageUrl}"}`
-    })
-        .then(resp => resp.json())
-        .then(console.log, console.error);
+    }).then(resp => resp.json());
 
 export default emotions;

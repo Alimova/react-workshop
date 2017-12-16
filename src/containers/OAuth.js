@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import API from "../services/instagram-api";
 import { Redirect } from "react-router-dom";
+import API from "../services/instagram-api";
 
 class OAuth extends Component {
     constructor() {

@@ -19,8 +19,6 @@ url: 'https://randomuser.me/api/',
 
 CLIENT INFO
 CLIENT ID	770053a1c5514ee59178d9f0aadf79ab
-SUPPORT EMAIL	new@alimov.net
-CLIENT STATUS	Sandbox Mode
 
 fetch('https://westus.api.cognitive.microsoft.com/emotion/v1.0/recognize', {
   method: 'POST',

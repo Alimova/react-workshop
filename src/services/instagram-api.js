@@ -3,10 +3,9 @@ const CLIENT_ID = "770053a1c5514ee59178d9f0aadf79ab";
 
 let token = localStorage.INSTA_TOKEN || "";
 
-const instaGet = `${API_HOST}/users/set/media/recents/?access_token=${token}`;
+// const instaGet = `${API_HOST}/v1/users/self/media/recent/?access_token=${token}`;
 
 const REDIRECT_URI = `${window.location.origin}/oauth`;
-// const imageUrl = 'https://www.instagram.com/p/BPsoK43AS5PPrRKJ4w3RrYTG2wmxbiEQa3sqwk0/'
 
 const API = {
     login() {
@@ -21,16 +20,18 @@ const API = {
         if (!token) {
             throw new Error("Token is not yet set");
         }
-        const getUrl = photoObj => photoObj.standard_resolution.url;
-        return fetch(instaGet)
+        const getUrl = photoObj => photoObj.images.standard_resolution.url;
+        return fetch(
+            `${API_HOST}/v1/users/self/media/recent/?access_token=${token}`
+        )
             .then(resp => resp.json())
             .then(respBody => respBody.data)
-            .then(data => {
+            .then(data =>
                 data.map(entry => ({
                     id: entry.id,
                     urls: (entry.carousel_media || [entry]).map(getUrl)
-                }));
-            });
+                }))
+            );
     },
     setToken(newToken) {
         token = newToken;

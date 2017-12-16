@@ -5,12 +5,12 @@ import EMO_API from "../services/emotions-api";
 
 const EMO_TO_EMOJI_MAPPER = {
     anger: "😡",
-    happiness: "🤣",
+    happiness: "😂",
     contempt: "🙂",
     disgust: "🤮",
     fear: "🙀",
     neutral: "😐",
-    sadness: "☹️",
+    sadness: "☹",
     surprise: "😲"
 };
 
@@ -42,7 +42,7 @@ const EPhoto = ({ url, onEmojify, emotions = [] }) => {
                     </span>
                 );
             })}
-            <img src={url} alt="insta" />
+            <img src={url} alt="test" />
             <button onClick={() => onEmojify(url)}>Emojify</button>
         </p>
     );
@@ -52,52 +52,69 @@ class Home extends Component {
     constructor() {
         super();
 
+        this.emojify = this.emojify.bind(this);
         this.state = {
+            hasAuth: API.hasAuth(),
             isLoading: false,
             error: null,
-            data: []
+            data: [],
+            emotions: {}
         };
-    }
-    emojify(imageUrl) {
-        EMO_API.emotions(imageUrl).then(data => {
-            console.log(data);
-            this.setState();
-        });
-    }
-
-    renderHome() {
-        const { isLoading, error, data } = this.state;
-        if (this.state.isLoading) {
-            return <span>Loading...</span>;
-        }
-        return error ? (
-            <span>Sorry, error: {error} </span>
-        ) : (
-            data.map(photoObjs => {
-                const id = photoObjs.id;
-                return photoObjs.urls.map((url, index) => {
-                    return;
-                    <li key={`${id}-${index}`}>
-                        <EPhoto
-                            emotions={this.state.emotionsUrl}
-                            onEmojify={this.emojify}
-                            url={url}
-                        />
-                    </li>;
-                });
-            })
-        );
     }
 
     componentWillMount() {
+        this.setState({ isLoading: true });
         API.getPhotos().then(
             data => this.setState({ data, error: null, isLoading: false }),
             error => this.setState({ data: [], error, isLoading: false })
         );
     }
 
+    emojify(imageUrl) {
+        console.log(`Emojyfying ${imageUrl}`);
+        EMO_API(imageUrl).then(data => {
+            this.setState({
+                emotions: {
+                    ...this.state.emotions,
+                    [imageUrl]: data
+                }
+            });
+        });
+    }
+
+    renderHome() {
+        const { emotions, isLoading, error, data } = this.state;
+        if (isLoading) {
+            return <span>Loading...</span>;
+        }
+        console.log("data", data);
+        console.log("error", error);
+        return error ? (
+            <span>Sorry, error: {error} </span>
+        ) : (
+            <ul>
+                {data.map(photoObjs => {
+                    const id = photoObjs.id;
+                    return photoObjs.urls.map((url, index) => (
+                        <li key={`${id}-${index}`}>
+                            <EPhoto
+                                emotions={emotions[url]}
+                                onEmojify={this.emojify}
+                                url={url}
+                            />
+                        </li>
+                    ));
+                })}
+            </ul>
+        );
+    }
+
     render() {
-        return this.state.hasAuth() ? this.renderHome() : <Redirect to="/" />;
+        return this.state.hasAuth ? (
+            this.renderHome()
+        ) : (
+            <Redirect to="/login" />
+        );
     }
 }
 
