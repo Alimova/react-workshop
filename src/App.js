@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-import OAuth from "./services/OAuth";
+import OAuth from "./containers/OAuth";
 import Login from "./containers/Login";
 
 const Home = () => <h1>Home Kottans</h1>;
@@ -22,6 +21,9 @@ class App extends Component {
                         </li>
                         <li>
                             <Link to="/login">Login</Link>
+                        </li>
+                        <li>
+                            <Link to="/oauth">OAuth</Link>
                         </li>
                     </ul>
 

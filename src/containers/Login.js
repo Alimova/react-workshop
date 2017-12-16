@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from "react";
-import INSTA from "./services/instagram-api";
+import INSTA from "../services/instagram-api";
 
 class Login extends Component {
     constructor() {
         super();
-        this.login = this.lodin.bind(this);
+        this.login = this.login.bind(this);
     }
 
     login() {
